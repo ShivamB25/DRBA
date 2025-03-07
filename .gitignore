@@ -169,7 +169,7 @@ cython_debug/
 
 # Ruff stuff:
 .ruff_cache/
-
+*.mkv
 # PyPI configuration file
 .pypirc
 lia/**

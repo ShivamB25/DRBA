@@ -42,18 +42,23 @@ class Model:
         self.feat_ext.half()
         self.fusionnet.half()
 
-    def load_model(self, path, rank):
+    def load_model(self, path, rank, device=None):
         def convert(param):
             return {
                 k.replace("module.", ""): v
                 for k, v in param.items()
                 if "module." in k
             }
-
-        self.flownet.load_state_dict(torch.load('{}/flownet.pkl'.format(path), map_location='cpu'))
-        self.metricnet.load_state_dict(torch.load('{}/metric.pkl'.format(path), map_location='cpu'))
-        self.feat_ext.load_state_dict(torch.load('{}/feat.pkl'.format(path), map_location='cpu'))
-        self.fusionnet.load_state_dict(torch.load('{}/fusionnet.pkl'.format(path), map_location='cpu'))
+        
+        # Get the current device if not specified
+        if device is None:
+            device = next(self.flownet.parameters()).device
+            
+        # Load model weights to the specified device
+        self.flownet.load_state_dict(torch.load('{}/flownet.pkl'.format(path), map_location=device))
+        self.metricnet.load_state_dict(torch.load('{}/metric.pkl'.format(path), map_location=device))
+        self.feat_ext.load_state_dict(torch.load('{}/feat.pkl'.format(path), map_location=device))
+        self.fusionnet.load_state_dict(torch.load('{}/fusionnet.pkl'.format(path), map_location=device))
 
     def reuse(self, img0, img1, scale):
         feat11, feat12, feat13 = self.feat_ext(img0)

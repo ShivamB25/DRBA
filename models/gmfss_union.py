@@ -11,8 +11,8 @@ class GMFSS_UNION:
     def __init__(self, weights='weights/train_log_gmfss_union',
                  scale=1.0, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         self.model = Model()
-        self.model.load_model(weights, -1)
         self.model.device(device)
+        self.model.load_model(weights, -1, device)
         self.model.eval()
         self.ifnet = IFNet().to(device).eval()
         self.ifnet.load_state_dict(

@@ -8,8 +8,8 @@ class GMFSS:
     def __init__(self, weights=r'weights/train_log_gmfss', scale=1.0,
                  device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         self.model = Model()
-        self.model.load_model(weights, -1)
         self.model.device(device)
+        self.model.load_model(weights, -1, device)
         self.model.eval()
         self.scale = scale
         self.pad_size = 64
